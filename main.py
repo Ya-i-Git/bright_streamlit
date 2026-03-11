@@ -56,19 +56,6 @@ st.line_chart(tickers[option])
 
 with st.sidebar:
 
-    def make_report():
-        time.sleep(1)
-        return tickers[option].to_csv()
-
-    st.download_button(
-        label=f"'{option}' - cкачать отчет в csv 📕",
-        data=make_report,
-        file_name="report.csv",
-        mime="text/csv",
-    )
-    
-    st.write('__________')
-
     fig, ax = plt.subplots(dpi=500)
     ax.plot(tickers.index, tickers[option])
     ax.set_xlabel('Дата')
@@ -80,9 +67,13 @@ with st.sidebar:
     fig.savefig(buf, format='png', bbox_inches='tight')
     buf.seek(0)
 
+    def make_report():
+        time.sleep(1)
+        return buf
+    
     st.download_button(
         label=f"'{option}' - cкачать график 📉",
-        data=buf,
+        data=make_report,
         file_name="report.png",
         mime="image/png"
     )
